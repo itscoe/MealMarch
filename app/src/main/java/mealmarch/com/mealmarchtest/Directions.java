@@ -14,7 +14,6 @@ import com.here.android.mpa.routing.RouteManager;
 import com.here.android.mpa.routing.RouteOptions;
 import com.here.android.mpa.routing.RoutePlan;
 import com.here.android.mpa.routing.RouteResult;
-
 import java.lang.ref.WeakReference;
 import java.util.List;
 
@@ -24,12 +23,16 @@ public class Directions extends AppCompatActivity {
     // Declare the rm variable (the RouteManager)
     RouteManager rm = new RouteManager();
     RoutePlan routePlan = new RoutePlan();
-    //routePlan.addWaypoint(new GeoCoordinate(49.1966286, -123.0053635));
-    //routePlan.addWaypoint(new GeoCoordinate(49.1947289, -123.1762924));
-    //RouteOptions routeOptions = new RouteOptions();
-    //routeOptions.setTransportMode(RouteOptions.TransportMode.PEDESTRIAN);
-    //routeOptions.setRouteType(RouteOptions.Type.FASTEST);
-    //routePlan.setRouteOptions(routeOptions);
+    GeoCoordinate restaurant;
+    boolean hasRoute = false;
+
+    Directions(GeoCoordinate restaurant){
+        this.restaurant = restaurant;
+        RouteOptions routeOptions = new RouteOptions();
+        routeOptions.setTransportMode(RouteOptions.TransportMode.PEDESTRIAN);
+        routeOptions.setRouteType(RouteOptions.Type.FASTEST);
+        routePlan.setRouteOptions(routeOptions);
+    }
 
     private class RouteListener implements RouteManager.Listener {
 
@@ -50,7 +53,7 @@ public class Directions extends AppCompatActivity {
                 Map map = mapFragment.getMap();
                 map.addMapObject(mapRoute);
             } else {
-                // Display a message indicating route calculation failure
+                System.out.println("Could not find route");
             }
         }
     }
@@ -70,24 +73,16 @@ public class Directions extends AppCompatActivity {
                     OnEngineInitListener.Error error) {
                 if (error == OnEngineInitListener.Error.NONE) {
                     // now the map is ready to be used
+                    // now the map is ready to be used
                     Map map = mapFragment.getMap();
-                    // ...
+                    PositioningManager.getInstance().addListener(
+                            new WeakReference<>(positionListener));
+                    map.getPositionIndicator().setVisible(true);
                 } else {
                     System.out.println("ERROR: Cannot initialize MapFragment");
                 }
             }
         });
-        // now the map is ready to be used
-        Map map = mapFragment.getMap();
-
-        // Set the map center to Vancouver, Canada.
-        map.setCenter(new GeoCoordinate(49.196261,
-                -123.004773), Map.Animation.NONE);
-
-        rm.calculateRoute(routePlan, new RouteListener());
-        PositioningManager.getInstance().addListener(
-                new WeakReference<>(positionListener));
-        map.getPositionIndicator().setVisible(true);
     }
 
     private PositioningManager.OnPositionChangedListener positionListener = new
@@ -99,7 +94,13 @@ public class Directions extends AppCompatActivity {
                 @Override
                 public void onPositionUpdated(PositioningManager.LocationMethod locationMethod, GeoPosition geoPosition, boolean b) {
                     map.setCenter(geoPosition.getCoordinate(),
-                            Map.Animation.NONE);
+                            Map.Animation.LINEAR);
+                    if(!hasRoute) {
+                        routePlan.addWaypoint(geoPosition.getCoordinate());
+                        routePlan.addWaypoint(restaurant);
+                        rm.calculateRoute(routePlan, new RouteListener());
+                        hasRoute = true;
+                    }
                 }
 
                 @Override
