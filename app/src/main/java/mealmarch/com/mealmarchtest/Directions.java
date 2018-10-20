@@ -24,12 +24,12 @@ public class Directions extends AppCompatActivity {
     // Declare the rm variable (the RouteManager)
     RouteManager rm = new RouteManager();
     RoutePlan routePlan = new RoutePlan();
-    routePlan.addWaypoint(new GeoCoordinate(49.1966286, -123.0053635));
-    routePlan.addWaypoint(new GeoCoordinate(49.1947289, -123.1762924));
-    RouteOptions routeOptions = new RouteOptions();
-    routeOptions.setTransportMode(RouteOptions.TransportMode.PEDESTRIAN);
-    routeOptions.setRouteType(RouteOptions.Type.FASTEST);
-    routePlan.setRouteOptions(routeOptions);
+    //routePlan.addWaypoint(new GeoCoordinate(49.1966286, -123.0053635));
+    //routePlan.addWaypoint(new GeoCoordinate(49.1947289, -123.1762924));
+    //RouteOptions routeOptions = new RouteOptions();
+    //routeOptions.setTransportMode(RouteOptions.TransportMode.PEDESTRIAN);
+    //routeOptions.setRouteType(RouteOptions.Type.FASTEST);
+    //routePlan.setRouteOptions(routeOptions);
 
     private class RouteListener implements RouteManager.Listener {
 
@@ -49,8 +49,7 @@ public class Directions extends AppCompatActivity {
                         getFragmentManager().findFragmentById(R.id.mapfragment);
                 Map map = mapFragment.getMap();
                 map.addMapObject(mapRoute);
-            }
-            else {
+            } else {
                 // Display a message indicating route calculation failure
             }
         }
@@ -90,11 +89,13 @@ public class Directions extends AppCompatActivity {
                 new WeakReference<>(positionListener));
         map.getPositionIndicator().setVisible(true);
     }
+
     private PositioningManager.OnPositionChangedListener positionListener = new
             PositioningManager.OnPositionChangedListener() {
                 final MapFragment mapFragment = (MapFragment)
                         getFragmentManager().findFragmentById(R.id.mapfragment);
                 Map map = mapFragment.getMap();
+
                 @Override
                 public void onPositionUpdated(PositioningManager.LocationMethod locationMethod, GeoPosition geoPosition, boolean b) {
                     map.setCenter(geoPosition.getCoordinate(),
@@ -105,5 +106,5 @@ public class Directions extends AppCompatActivity {
                 public void onPositionFixChanged(PositioningManager.LocationMethod locationMethod, PositioningManager.LocationStatus locationStatus) {
 
                 }
-            }
+            };
 }
