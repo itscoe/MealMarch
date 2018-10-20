@@ -40,7 +40,7 @@ public class MyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
-        places = new String[20][10];
+        places = new String[20][3];
         searchBtn  = (Button)findViewById(R.id.searchFoodBtn);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             //creates button calling functionality
@@ -61,71 +61,12 @@ public class MyActivity extends AppCompatActivity {
     }
 
     public void searchFood(View v){
-        //function called on button press
-        //calls places API and receives location data
-        //String location, radius;
-        //temporary dummy data
-        //radius = "5000";
-        //location = "41.981950,-91.663183";
-        //result.setText("Hello");
-        //searchUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+location+"&radius="+radius+"&type=restaurant&key="+APIKey;
-
-
         try{
 
-
-
-            //String searchString = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+location+"&radius="+radius+"&type=restaurant&key="+APIKey;
-//            URL url = new URL(searchString);
-//            RequestQueue requestQueue = Volley.newRequestQueue(this);
-//            StringRequest stringRequest = new StringRequest(Request.Method.GET, searchString,
-//                    new Response.Listener<String>() {
-//                        @Override
-//                        public void onResponse(String response) {
-//                            result.setText("Hello there");
-//                        }
-//                    }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    result.setText("Bad bad bad");
-//                }
-//            });
-//            int i = 0;
-//            RequestQueue requestQueue = Volley.newRequestQueue(this);
-//            JsonObjectRequest jsonObjectRequest;
-//            do{
-//                i = i+1;
-//            jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, searchString, null, new Response.Listener<JSONObject>() {
-//                @Override
-//                public void onResponse(JSONObject response) {
-//                    searchResult = response.toString();
-//                }
-//            }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError error) {
-//                    result.setText("Bad bad bad");
-//                }
-//
-//            });
-//            Thread.sleep(500);
-//        } while(searchResult == null && i < 10);
-//            requestQueue.add(jsonObjectRequest);
-//            int i = 0;
-//            while(searchResult == null && i < 20){
-//                searchResult = findFood( searchString);
-//                Thread.sleep(300);
-//                TimerTask timer = new TimerTask() {
-//                    @Override
-//                    public void run() {
-//
-//                    }
-//                }
-//                i++;
-//            }
             //searchResult = toReturn;
             //result.setText(searchResult);
             searchResult = findFood(searchUrl);
-            String[] lines = searchResult.split("location", 0);
+            String[] lines = searchResult.split("location\":", 0);
             result.setText((lines[0]));
             if(searchResult != null) {
             }
@@ -134,13 +75,37 @@ public class MyActivity extends AppCompatActivity {
             }
             //String[] lining = (result.getText()).toString().split("\n", 0);
             //result.setText(lines.length);
+            for (int i = 1; i < lines.length && i < 21; i++){
+                //result.setText(lines[i]);
+                int idx1, idx2, fromIdx;
+                String loc, lat, lng, name, foodType, rating;
+                idx1 = lines[i].indexOf(':');
+                idx2 = lines[i].indexOf(',');
+                lat = lines[i].substring(idx1+1, idx2);
+                fromIdx = idx2;
+                idx1 = lines[i].indexOf(':', fromIdx);
+                idx2 = lines[i].indexOf('}', idx1);
+                lng = lines[i].substring(idx1+1,idx2);
+                loc = lat+","+lng;
+                String sub1, sub2;
+                String[] splitIt = lines[i].split("\"name\":\"");
+                sub1 = splitIt[1];
+                idx1 = sub1.indexOf('\"');
+                name = sub1.substring(0, idx1);
+                String[] splitAgain = lines[i].split("\"rating\":");
+                sub2 = splitAgain[1];
+                rating = sub2.substring(0,3);
+                places[i][0] = loc;
+                places[i][1] = name;
+                places[i][2] = rating;
+            }
+            
 
         }
         catch(Exception e){
             result.setText(e.toString());
         }
     }
-
 
 
     private String findFood( String url) {
@@ -159,8 +124,6 @@ public class MyActivity extends AppCompatActivity {
 
         });
         requestQueue.add(jsonObjectRequest);
-
-        //requestQueue.add(jsonObjectRequest);
 
         return toReturn;
     }
