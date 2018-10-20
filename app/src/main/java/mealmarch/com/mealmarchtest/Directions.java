@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import com.here.android.mpa.common.GeoCoordinate;
 import com.here.android.mpa.common.OnEngineInitListener;
+import com.here.android.mpa.common.PositioningManager;
 import com.here.android.mpa.mapping.Map;
 import com.here.android.mpa.mapping.MapFragment;
 
@@ -12,8 +13,6 @@ public class Directions extends AppCompatActivity {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_directions);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_directions);
         // Search for the Map Fragment
