@@ -22,6 +22,7 @@ import java.io.StringReader;
 import java.net.URL;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.Random;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -32,8 +33,7 @@ public class MyActivity extends AppCompatActivity {
     TextView result;
     private String searchResult, toReturn, searchUrl;
     private String[][] places;
-
-
+    private int selection;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +55,6 @@ public class MyActivity extends AppCompatActivity {
         location = "41.981950,-91.663183";
         searchUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+location+"&radius="+radius+"&type=restaurant&key="+APIKey;
         findFood(searchUrl);
-
-
-
     }
 
     public void searchFood(View v){
@@ -95,18 +92,22 @@ public class MyActivity extends AppCompatActivity {
                 String[] splitAgain = lines[i].split("\"rating\":");
                 sub2 = splitAgain[1];
                 rating = sub2.substring(0,3);
-                places[i][0] = loc;
-                places[i][1] = name;
-                places[i][2] = rating;
+                places[i-1][0] = loc;
+                places[i-1][1] = name;
+                places[i-1][2] = rating;
             }
-            
-
+            Random rand = new Random();
+            int min = lines.length;
+            if (lines.length > 20){
+                min = 20;
+            }
+            selection = rand.nextInt(min);
+            result.setText(places[selection][1]);
         }
         catch(Exception e){
             result.setText(e.toString());
         }
     }
-
 
     private String findFood( String url) {
         RequestQueue requestQueue = Volley.newRequestQueue(this);
@@ -121,12 +122,9 @@ public class MyActivity extends AppCompatActivity {
             public void onErrorResponse(VolleyError error) {
                 result.setText("Bad bad bad");
             }
-
         });
         requestQueue.add(jsonObjectRequest);
 
         return toReturn;
     }
-
-
 }
