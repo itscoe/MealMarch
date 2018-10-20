@@ -2,26 +2,31 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="mealmarch.com.mealmarchtest">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <application
-        android:label="@string/app_name" android:hardwareAccelerated="true">
-        <meta-data android:name="com.here.android.maps.appid"
-            android:value="bzzJVzQnJg3AoE5gLYoD"/>
-        <meta-data android:name="com.here.android.maps.apptoken"
-            android:value="azSI9VgrHGFuZbYW13_d_w"/>
-        <meta-data android:name="com.here.android.maps.license.key"
-            android:value="{YOUR_LICENSE_KEY}"/>
+        android:hardwareAccelerated="true"
+        android:label="@string/app_name">
+        <meta-data
+            android:name="com.here.android.maps.appid"
+            android:value="bzzJVzQnJg3AoE5gLYoD" />
+        <meta-data
+            android:name="com.here.android.maps.apptoken"
+            android:value="azSI9VgrHGFuZbYW13_d_w" />
+        <meta-data
+            android:name="com.here.android.maps.license.key"
+            android:value="{YOUR_LICENSE_KEY}" />
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat"
-        <activity android:name=".MyActivity"
+        <activity
+            android:name=".MyActivity"
             android:theme="@style/Theme.AppCompat.Light">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +34,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Directions"></activity>
+        <activity android:name=".Directions" />
+        <activity android:name=".HeatMap" />
+        <activity android:name=".Results" />
+        <activity android:name=".Feedback"></activity>
     </application>
 
 </manifest>
