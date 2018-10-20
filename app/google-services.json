@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "561713391464",
+    "firebase_url": "https://mealmarchtest.firebaseio.com",
+    "project_id": "mealmarchtest",
+    "storage_bucket": "mealmarchtest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561713391464:android:5e2ee63444ed4542",
+        "android_client_info": {
+          "package_name": "mealmarch.com.mealmarchtest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561713391464-s9jddr58ilpbrn00i6qmgaslalfijiql.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "mealmarch.com.mealmarchtest",
+            "certificate_hash": "d291787b0c3583a8db13cf7205fe1505bf885d0d"
+          }
+        },
+        {
+          "client_id": "561713391464-ks78dujckdrvcgoteskidq1ghjbq3ri2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5r9Kb2A-OkrZZxAEuE9PF-J1FyJpMssM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561713391464-ks78dujckdrvcgoteskidq1ghjbq3ri2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
