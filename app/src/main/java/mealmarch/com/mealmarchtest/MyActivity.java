@@ -1,5 +1,6 @@
 package mealmarch.com.mealmarchtest;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -29,7 +30,7 @@ import javax.net.ssl.HttpsURLConnection;
 public class MyActivity extends AppCompatActivity {
 
     private static String APIKey = "AIzaSyDqDkgbIeELCnh6ek8QCm-ROu_rd1SkydU";
-    Button searchBtn;
+    Button searchBtn, hardBtn, easyBtn;
     TextView result;
     private String searchResult, toReturn, searchUrl;
     private String[][] places;
@@ -42,6 +43,14 @@ public class MyActivity extends AppCompatActivity {
 
         places = new String[20][3];
         searchBtn  = (Button)findViewById(R.id.searchFoodBtn);
+        easyBtn = (Button)findViewById(R.id.directBtn);
+        easyBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                easyBtn(v);
+            }
+        });
+        hardBtn = (Button)findViewById(R.id.hotColdbtn);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             //creates button calling functionality
             @Override
@@ -126,5 +135,13 @@ public class MyActivity extends AppCompatActivity {
         requestQueue.add(jsonObjectRequest);
 
         return toReturn;
+    }
+
+    private void easyBtn(View v){
+        Intent i = new Intent(this, Directions.class);
+        i.putExtra(places[selection][0], "loc");
+        i.putExtra(places[selection][1], "name");
+        i.putExtra(places[selection][2], "rating");
+        //startActivity(i);
     }
 }
