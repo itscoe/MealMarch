@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.here.android.mpa.search.HereRequest;
 
 import org.json.JSONObject;
 
@@ -35,12 +36,13 @@ public class MyActivity extends AppCompatActivity {
     private String searchResult, toReturn, searchUrl;
     private String[][] places;
     private int selection;
+    private boolean first;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
-
+        first = true;
         places = new String[20][3];
         searchBtn  = (Button)findViewById(R.id.searchFoodBtn);
         easyBtn = (Button)findViewById(R.id.directBtn);
@@ -50,7 +52,9 @@ public class MyActivity extends AppCompatActivity {
                 easyBtn(v);
             }
         });
+        easyBtn.setVisibility(View.GONE);
         hardBtn = (Button)findViewById(R.id.hotColdbtn);
+        hardBtn.setVisibility(View.GONE);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             //creates button calling functionality
             @Override
@@ -61,6 +65,9 @@ public class MyActivity extends AppCompatActivity {
         result = (TextView)(findViewById(R.id.pageText));
         String location, radius;
         radius = "5000";
+
+        //Provide location data
+
         location = "41.981950,-91.663183";
         searchUrl = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location="+location+"&radius="+radius+"&type=restaurant&key="+APIKey;
         findFood(searchUrl);
@@ -71,6 +78,7 @@ public class MyActivity extends AppCompatActivity {
 
             //searchResult = toReturn;
             //result.setText(searchResult);
+
             searchResult = findFood(searchUrl);
             String[] lines = searchResult.split("location\":", 0);
             result.setText((lines[0]));
@@ -81,29 +89,33 @@ public class MyActivity extends AppCompatActivity {
             }
             //String[] lining = (result.getText()).toString().split("\n", 0);
             //result.setText(lines.length);
-            for (int i = 1; i < lines.length && i < 21; i++){
-                //result.setText(lines[i]);
-                int idx1, idx2, fromIdx;
-                String loc, lat, lng, name, foodType, rating;
-                idx1 = lines[i].indexOf(':');
-                idx2 = lines[i].indexOf(',');
-                lat = lines[i].substring(idx1+1, idx2);
-                fromIdx = idx2;
-                idx1 = lines[i].indexOf(':', fromIdx);
-                idx2 = lines[i].indexOf('}', idx1);
-                lng = lines[i].substring(idx1+1,idx2);
-                loc = lat+","+lng;
-                String sub1, sub2;
-                String[] splitIt = lines[i].split("\"name\":\"");
-                sub1 = splitIt[1];
-                idx1 = sub1.indexOf('\"');
-                name = sub1.substring(0, idx1);
-                String[] splitAgain = lines[i].split("\"rating\":");
-                sub2 = splitAgain[1];
-                rating = sub2.substring(0,3);
-                places[i-1][0] = loc;
-                places[i-1][1] = name;
-                places[i-1][2] = rating;
+            if(first) {
+                for (int i = 1; i < lines.length && i < 21; i++) {
+                    //result.setText(lines[i]);
+                    int idx1, idx2, fromIdx;
+                    String loc, lat, lng, name, foodType, rating;
+                    idx1 = lines[i].indexOf(':');
+                    idx2 = lines[i].indexOf(',');
+                    lat = lines[i].substring(idx1 + 1, idx2);
+                    fromIdx = idx2;
+                    idx1 = lines[i].indexOf(':', fromIdx);
+                    idx2 = lines[i].indexOf('}', idx1);
+                    lng = lines[i].substring(idx1 + 1, idx2);
+                    loc = lat + "," + lng;
+                    String sub1, sub2;
+                    String[] splitIt = lines[i].split("\"name\":\"");
+                    sub1 = splitIt[1];
+                    idx1 = sub1.indexOf('\"');
+                    name = sub1.substring(0, idx1);
+                    String[] splitAgain = lines[i].split("\"rating\":");
+                    sub2 = splitAgain[1];
+                    idx1 = sub2.indexOf(',');
+                    rating = sub2.substring(0, idx1);
+                    places[i - 1][0] = loc;
+                    places[i - 1][1] = name;
+                    places[i - 1][2] = rating;
+                }
+                first = false;
             }
             Random rand = new Random();
             int min = lines.length;
@@ -111,7 +123,10 @@ public class MyActivity extends AppCompatActivity {
                 min = 20;
             }
             selection = rand.nextInt(min);
-            result.setText(places[selection][1]);
+            String resultStr = places[selection][1]+"\n\nRating of "+places[selection][2]+"/5";
+            result.setText(resultStr);
+            easyBtn.setVisibility(View.VISIBLE);
+            hardBtn.setVisibility(View.VISIBLE);
         }
         catch(Exception e){
             result.setText(e.toString());
