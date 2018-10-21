@@ -115,6 +115,7 @@ public class MyActivity extends AppCompatActivity {
                     places[i - 1][1] = name;
                     places[i - 1][2] = rating;
                 }
+                searchBtn.setText("Refresh");
                 first = false;
             }
             Random rand = new Random();
