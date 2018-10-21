@@ -28,12 +28,14 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginTop="200dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:isIndicator="true"
         android:numStars="5"
         android:stepSize=".1"
         android:visibility="visible"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="42dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/Finish"
