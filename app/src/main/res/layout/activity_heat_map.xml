@@ -4,12 +4,35 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".HeatMap">
 
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:srcCompat="@color/colorAccent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="TextView" />
+
     <fragment
-        class="com.here.android.mpa.mapping.MapFragment"
         android:id="@+id/mapfragment"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"/>
+        class="com.here.android.mpa.mapping.MapFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="0.0000001" />
 
 </LinearLayout>

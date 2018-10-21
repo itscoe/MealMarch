@@ -1,7 +1,13 @@
 package mealmarch.com.mealmarchtest;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.here.android.mpa.common.GeoCoordinate;
 import com.here.android.mpa.common.GeoPosition;
@@ -15,7 +21,11 @@ import com.here.android.mpa.routing.RouteOptions;
 import com.here.android.mpa.routing.RoutePlan;
 import com.here.android.mpa.routing.RouteResult;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.google.common.reflect.Reflection.initialize;
 
 
 public class Directions extends AppCompatActivity {
@@ -25,13 +35,60 @@ public class Directions extends AppCompatActivity {
     RoutePlan routePlan = new RoutePlan();
     GeoCoordinate restaurant;
     boolean hasRoute = false;
+    MapFragment mapFragment;
+    Map map;
 
-    Directions(){
-        this.restaurant = restaurant;
-        RouteOptions routeOptions = new RouteOptions();
-        routeOptions.setTransportMode(RouteOptions.TransportMode.PEDESTRIAN);
-        routeOptions.setRouteType(RouteOptions.Type.FASTEST);
-        routePlan.setRouteOptions(routeOptions);
+    /**
+     * permissions request code
+     */
+    private final static int REQUEST_CODE_ASK_PERMISSIONS = 1;
+
+    /**
+     * Permissions that need to be explicitly requested from end user.
+     */
+    private static final String[] REQUIRED_SDK_PERMISSIONS = new String[] {
+            Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.WRITE_EXTERNAL_STORAGE };
+
+    protected void checkPermissions() {
+        final List<String> missingPermissions = new ArrayList<String>();
+        // check all required dynamic permissions
+        for (final String permission : REQUIRED_SDK_PERMISSIONS) {
+            final int result = ContextCompat.checkSelfPermission(this, permission);
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                missingPermissions.add(permission);
+            }
+        }
+        if (!missingPermissions.isEmpty()) {
+            // request all missing permissions
+            final String[] permissions = missingPermissions
+                    .toArray(new String[missingPermissions.size()]);
+            ActivityCompat.requestPermissions(this, permissions, REQUEST_CODE_ASK_PERMISSIONS);
+        } else {
+            final int[] grantResults = new int[REQUIRED_SDK_PERMISSIONS.length];
+            Arrays.fill(grantResults, PackageManager.PERMISSION_GRANTED);
+            onRequestPermissionsResult(REQUEST_CODE_ASK_PERMISSIONS, REQUIRED_SDK_PERMISSIONS,
+                    grantResults);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+                                           @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_CODE_ASK_PERMISSIONS:
+                for (int index = permissions.length - 1; index >= 0; --index) {
+                    if (grantResults[index] != PackageManager.PERMISSION_GRANTED) {
+                        // exit the app if one permission is not granted
+                        Toast.makeText(this, "Required permission '" + permissions[index]
+                                + "' not granted, exiting", Toast.LENGTH_LONG).show();
+                        finish();
+                        return;
+                    }
+                }
+                // all permissions were granted
+                initialize();
+                break;
+        }
     }
 
     private class RouteListener implements RouteManager.Listener {
@@ -48,9 +105,6 @@ public class Directions extends AppCompatActivity {
             if (error == RouteManager.Error.NONE) {
                 // Render the route on the map
                 MapRoute mapRoute = new MapRoute(routeResult.get(0).getRoute());
-                final MapFragment mapFragment = (MapFragment)
-                        getFragmentManager().findFragmentById(R.id.mapfragment);
-                Map map = mapFragment.getMap();
                 map.addMapObject(mapRoute);
             } else {
                 System.out.println("Could not find route");
@@ -62,9 +116,22 @@ public class Directions extends AppCompatActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_directions);
-        // Search for the Map Fragment
-        final MapFragment mapFragment = (MapFragment)
+        String location = getIntent().getStringExtra("loc");
+        System.out.println("Location: " + location);
+        String[] coordinates = location.split(",");
+        System.out.println("Coordinates: " + coordinates.toString());
+        restaurant = new GeoCoordinate(Double.parseDouble(coordinates[0]), Double.parseDouble(coordinates[1]));
+        RouteOptions routeOptions = new RouteOptions();
+        routeOptions.setTransportMode(RouteOptions.TransportMode.PEDESTRIAN);
+        routeOptions.setRouteType(RouteOptions.Type.FASTEST);
+        routePlan.setRouteOptions(routeOptions);
+        ActivityCompat.requestPermissions(this,
+                new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                1);
+        mapFragment = (MapFragment)
                 getFragmentManager().findFragmentById(R.id.mapfragment);
+
+        // Search for the Map Fragment
         // initialize the Map Fragment and
         // retrieve the map that is associated to the fragment
         mapFragment.init(new OnEngineInitListener() {
@@ -74,7 +141,7 @@ public class Directions extends AppCompatActivity {
                 if (error == OnEngineInitListener.Error.NONE) {
                     // now the map is ready to be used
                     // now the map is ready to be used
-                    Map map = mapFragment.getMap();
+                    map = mapFragment.getMap();
                     PositioningManager.getInstance().addListener(
                             new WeakReference<>(positionListener));
                     map.getPositionIndicator().setVisible(true);
@@ -87,9 +154,6 @@ public class Directions extends AppCompatActivity {
 
     private PositioningManager.OnPositionChangedListener positionListener = new
             PositioningManager.OnPositionChangedListener() {
-                final MapFragment mapFragment = (MapFragment)
-                        getFragmentManager().findFragmentById(R.id.mapfragment);
-                Map map = mapFragment.getMap();
 
                 @Override
                 public void onPositionUpdated(PositioningManager.LocationMethod locationMethod, GeoPosition geoPosition, boolean b) {

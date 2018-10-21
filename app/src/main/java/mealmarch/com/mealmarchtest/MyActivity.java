@@ -154,9 +154,9 @@ public class MyActivity extends AppCompatActivity {
 
     private void easyBtn(View v){
         Intent i = new Intent(this, Directions.class);
-        i.putExtra(places[selection][0], "loc");
-        i.putExtra(places[selection][1], "name");
-        i.putExtra(places[selection][2], "rating");
-        //startActivity(i);
+        i.putExtra("loc", places[selection][0]);
+        i.putExtra("name", places[selection][1]);
+        i.putExtra("rating", places[selection][2]);
+        startActivity(i);
     }
 }
