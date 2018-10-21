@@ -40,8 +40,10 @@
         <activity android:name=".Directions"
             android:theme="@style/Theme.AppCompat.Light"/>
         <activity android:name=".HeatMap" />
-        <activity android:name=".Results" />
-        <activity android:name=".Feedback"></activity>
+        <activity android:name=".Results"
+            android:theme = "@style/Theme.AppCompat.Light"/>
+        <activity android:name=".Feedback"
+            android:theme = "@style/Theme.AppCompat.Light"/>
 
     </application>
 
