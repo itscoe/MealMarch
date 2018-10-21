@@ -23,7 +23,7 @@ public class Results extends AppCompatActivity {
 
         restaurant = getIntent().getStringExtra("name");
         String time2 = getIntent().getStringExtra("time");
-        time = Integer.parseInt(time2);
+        time = (Integer.parseInt(time2)/60);
         String distance2 = getIntent().getStringExtra("distance");
         dist = Double.parseDouble(distance2);
         String check2 = getIntent().getStringExtra("check");
