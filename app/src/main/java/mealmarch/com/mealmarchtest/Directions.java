@@ -186,8 +186,8 @@ public class  Directions extends AppCompatActivity {
 
     private void btnClick() {
         Intent i = new Intent(this, Results.class);
-        i.putExtra("distance", initialDistance);
-        i.putExtra("time", time);
+        i.putExtra("distance", Double.toString(initialDistance));
+        i.putExtra("time", Integer.toString(time));
         String name = getIntent().getStringExtra("name");
         i.putExtra("name", name);
         i.putExtra("check", false);
