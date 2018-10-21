@@ -52,7 +52,7 @@ public class Results extends AppCompatActivity {
                 Finish(v);
             }
         });
-        finishButton.setVisibility(View.GONE);
+        finishButton.setVisibility(View.VISIBLE);
 
         if (check == false)
         {

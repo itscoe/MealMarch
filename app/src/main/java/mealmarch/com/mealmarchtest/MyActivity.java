@@ -60,6 +60,8 @@ public class MyActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 searchFood(v);
+                pl.droidsonroids.gif.GifImageView gif = (pl.droidsonroids.gif.GifImageView)findViewById(R.id.gif);
+                gif.setScaleX(0);
             }
         });
         result = (TextView)(findViewById(R.id.pageText));
