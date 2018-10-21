@@ -129,22 +129,20 @@
 
         <TextView
             android:id="@+id/Threshold"
-            android:layout_width="115dp"
+            android:layout_width="60dp"
             android:layout_height="30dp"
-            android:layout_marginStart="48dp"
             android:layout_marginLeft="48dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="10dp"
+            android:layout_weight="1"
             android:text="THRESHOLD :"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:visibility="visible" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/Threshold_Info"
             android:layout_width="115dp"
             android:layout_height="30dp"
-            android:layout_marginTop="150dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="48dp"
             android:layout_marginRight="48dp"
             android:layout_marginBottom="10dp"
