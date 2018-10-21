@@ -26,7 +26,7 @@ public class Directions extends AppCompatActivity {
     GeoCoordinate restaurant;
     boolean hasRoute = false;
 
-    Directions(GeoCoordinate restaurant){
+    Directions(){
         this.restaurant = restaurant;
         RouteOptions routeOptions = new RouteOptions();
         routeOptions.setTransportMode(RouteOptions.TransportMode.PEDESTRIAN);
