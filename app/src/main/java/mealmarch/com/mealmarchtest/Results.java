@@ -10,18 +10,61 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 public class Results extends AppCompatActivity {
+    private String restaurant;
+    private double dist;
+    private int time;
+    private Boolean check;
+    Button finishButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_results);
 
+        restaurant = getIntent().getStringExtra("name");
+        String time2 = getIntent().getStringExtra("time");
+        time = Integer.parseInt(time2);
+        String distance2 = getIntent().getStringExtra("distance");
+        dist = Double.parseDouble(distance2);
+        String check2 = getIntent().getStringExtra("check");
+        check = Boolean.parseBoolean(check2);
+
         final TextView mDistance = findViewById(R.id.Distance_Info);
+        mDistance.setText(distance2);
+        TextView mTDistance = findViewById(R.id.DISTANCE);
         final TextView mTime = findViewById(R.id.Time_Info);
+        mTime.setText(time2);
+        TextView mTTime = findViewById(R.id.TIME);
         TextView mCalorie = findViewById(R.id.Calorie_Info);
+        double cal = dist * 0.06215040397;
+        mCalorie.setText(Double.toString(cal));
+        TextView mTCalorie = findViewById(R.id.calorie);
         TextView mThreshold = findViewById(R.id.Threshold_Info);
+        TextView mTThreshold = findViewById(R.id.Threshold);
+        TextView mCoupon = findViewById(R.id.Coupon_Info);
+        TextView mTCoupon = findViewById(R.id.Coupon);
         Button mShareButton = findViewById(R.id.ShareButton);
         Button mShareHCButton = findViewById(R.id.shareHCButton);
+        finishButton = (Button)findViewById(R.id.Finish);
+        finishButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Finish(v);
+            }
+        });
+        finishButton.setVisibility(View.GONE);
+
+        if (check == false)
+        {
+            mThreshold.setVisibility(View.GONE);
+            mTThreshold.setVisibility(View.GONE);
+            mCoupon.setVisibility(View.GONE);
+            mTCoupon.setVisibility(View.GONE);
+            mShareHCButton.setVisibility(View.GONE);
+            mCalorie.setVisibility(View.VISIBLE);
+            mTCalorie.setVisibility(View.VISIBLE);
+
+        }
 
         mShareButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -48,5 +91,16 @@ public class Results extends AppCompatActivity {
                 startActivity(Intent.createChooser(mSharingIntent, "Share text via"));
             }
         });
+
+
+
+    }
+
+
+    private void Finish(View v)
+    {
+        Intent i = new Intent(this, Feedback.class);
+        i.putExtra("name", restaurant);
+        startActivity(i);
     }
 }

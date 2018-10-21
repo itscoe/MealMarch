@@ -35,7 +35,7 @@ import java.util.TimerTask;
 import static com.google.common.reflect.Reflection.initialize;
 
 
-public class Directions extends AppCompatActivity {
+public class  Directions extends AppCompatActivity {
 
     // Declare the rm variable (the RouteManager)
     RouteManager rm = new RouteManager();
@@ -190,6 +190,7 @@ public class Directions extends AppCompatActivity {
         i.putExtra("time", time);
         String name = getIntent().getStringExtra("name");
         i.putExtra("name", name);
+        i.putExtra("check", false);
         startActivity(i);
     }
 

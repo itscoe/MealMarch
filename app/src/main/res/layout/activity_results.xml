@@ -225,7 +225,7 @@
         android:layout_marginBottom="51dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="You have arrived"
+        android:text=" You Have Arrived"
         android:textSize="30sp"
         app:layout_constraintBottom_toTopOf="@+id/Threshold"
         app:layout_constraintEnd_toEndOf="parent"
